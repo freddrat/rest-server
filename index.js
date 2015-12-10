@@ -1,15 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var util = require('util');
 
 // parse application/x-www-form-urlencoded 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
  
 // parse application/json 
-app.use(bodyParser.json());
+app.use(bodyParser.json({extended: true}));
 
 app.post('/EVENTS/:id', function(req,res,next) {
-	console.log(req.body);
+	console.log(util.inspect(req.body, false, null));
+	//console.log(JSON.stringify(req.body,null,2));
 	res.status(200).send("Server responding");
 	next();
 });
