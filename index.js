@@ -12,7 +12,6 @@ app.use(bodyParser.json({extended: true}));
 
 app.post('/EVENTS/:id', function(req,res,next) {
 	console.log(util.inspect(req.body, false, null));
-	//console.log(JSON.stringify(req.body,null,2));
 	res.status(200).send("Server responding");
 	next();
 });
@@ -38,6 +37,7 @@ app.post('/CONFIG/:id', function(req, res, next) {
 app.get('/CONFIG/:id', function(req, res, next) {
 	console.log(req.query.configHash);
 	//console.log(util.inspect(req.body.configHash, false, null));
+	
 	var confFileChecksum = helpers.getConfigFileChecksum(req.params.id);
 	if(confFileChecksum == -1) {
 		res.status(200).send('Error when retrieving checkum from configuration file for id: '+req.params.id);
@@ -48,7 +48,9 @@ app.get('/CONFIG/:id', function(req, res, next) {
 		if(isEqualChecksum) {
 			res.status(200).send('Hash valid');
 		} else {
-			res.status(200).send('Invalid hash => Please update your configuration...');
+			var content = helpers.getConfigFileContent(req.params.id);
+			console.log(content);
+			res.status(200).json(content);
 		}
 		//next();
 	}
